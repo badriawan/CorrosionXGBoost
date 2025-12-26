@@ -10,3 +10,68 @@ import seaborn as sns
 import joblib
 import os
 import logging
+
+
+# Ganti dengan path file kamu
+file_path = "/content/drive/MyDrive/S3 UTP/Soil_Pitting_Corrosion_Data.xlsx"
+df = pd.read_excel(file_path)
+
+print(df.head())
+
+X = df.drop(columns=['target'])  # ganti 'target' sesuai kolom kamu
+y = df['target']
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+model = XGBRegressor(
+    n_estimators=300,
+    max_depth=5,
+    learning_rate=0.05,
+    subsample=0.8,
+    colsample_bytree=0.8,
+    objective='reg:squarederror',
+    random_state=42
+)
+
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+mae = mean_absolute_error(y_test, y_pred)
+r2 = r2_score(y_test, y_pred)
+
+print(f"MSE  : {mse:.4f}")
+print(f"RMSE : {rmse:.4f}")
+print(f"MAE  : {mae:.4f}")
+print(f"R²   : {r2:.4f}")
+
+
+plt.figure(figsize=(8,5))
+plt.barh(X.columns, model.feature_importances_)
+plt.xlabel("Importance Score")
+plt.title("Feature Importance - XGBoost")
+plt.show()
+
+new_data = pd.DataFrame({
+    'feature_1': [7.2],
+    'feature_2': [45],
+    'feature_3': [30]
+})
+
+prediction = model.predict(new_data)
+print("Prediksi corrosion:", prediction)
+
+from sklearn.model_selection import cross_val_score
+
+scores = cross_val_score(
+    model, X, y,
+    scoring='neg_root_mean_squared_error',
+    cv=5
+)
+
+print("CV RMSE:", -scores.mean())
+
