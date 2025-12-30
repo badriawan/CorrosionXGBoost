@@ -13,7 +13,7 @@ import logging
 
 
 # Ganti dengan path file kamu
-file_path = "/content/drive/MyDrive/S3 UTP/Soil_Pitting_Corrosion_Data.csv"
+file_path = "/content/drive/MyDrive/S3 UTP/dataset/Soil_Pitting_Corrosion_Data.csv"
 df = pd.read_csv(file_path)
 
 print(df.head())
