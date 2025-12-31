@@ -88,6 +88,7 @@ new_data["feature_11_WTC"] = 1
 new_data["feature_12_SC"] = 1
 
 prediction = model.predict(new_data)
+plt.show()
 print("Prediksi corrosion:", prediction)
 
 from sklearn.model_selection import cross_val_score
@@ -105,11 +106,15 @@ explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(X_train)
 
 shap.summary_plot(shap_values, X_train)
+plt.show()
+
 shap.summary_plot(
     shap_values,
     X_train,
     plot_type="bar"
 )
+plt.show()
+
 
 sample_idx = 0
 
@@ -119,9 +124,13 @@ shap.force_plot(
     X_train.iloc[sample_idx],
     matplotlib=True
 )
+plt.show()
+
 
 shap.dependence_plot(
     "feature_2",  # ganti fitur utama
     shap_values,
     X_train
 )
+plt.show()
+
