@@ -13,7 +13,7 @@ import logging
 
 
 # Ganti dengan path file kamu
-file_path = "/content/drive/MyDrive/S3 UTP/dataset/Soil_Pitting_Corrosion_Data.xlsx"
+file_path = "/content/drive/MyDrive/S3 UTP/dataset/Soil_Pitting_Corrosion_Data_Final.xlsx"
 df = pd.read_excel(file_path)
 
 print(df.head())
