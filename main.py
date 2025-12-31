@@ -72,6 +72,7 @@ plt.figure(figsize=(8,5))
 plt.barh(X.columns, model.feature_importances_)
 plt.xlabel("Importance Score")
 plt.title("Feature Importance - XGBoost")
+plt.savefig("score.png", dpi=300, bbox_inches="tight")
 plt.show()
 
 # simpan feature names
@@ -90,7 +91,6 @@ new_data["feature_11_WTC"] = 1
 new_data["feature_12_SC"] = 1
 
 prediction = model.predict(new_data)
-plt.show()
 print("Prediksi corrosion:", prediction)
 
 from sklearn.model_selection import cross_val_score
@@ -108,14 +108,14 @@ explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(X_train)
 
 shap.summary_plot(shap_values, X_train)
-plt.show()
+plt.savefig("summary_plot.png", dpi=300, bbox_inches="tight")
 
 shap.summary_plot(
     shap_values,
     X_train,
     plot_type="bar"
 )
-plt.show()
+plt.savefig("summary_2.png", dpi=300, bbox_inches="tight")
 
 
 sample_idx = 0
@@ -126,7 +126,7 @@ shap.force_plot(
     X_train.iloc[sample_idx],
     matplotlib=True
 )
-plt.show()
+plt.savefig("force.png", dpi=300, bbox_inches="tight")
 
 
 shap.dependence_plot(
@@ -134,5 +134,5 @@ shap.dependence_plot(
     shap_values,
     X_train
 )
-plt.show()
+plt.savefig("dependence.png", dpi=300, bbox_inches="tight")
 
