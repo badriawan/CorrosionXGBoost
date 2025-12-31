@@ -100,3 +100,28 @@ scores = cross_val_score(
 
 print("CV RMSE:", -scores.mean())
 
+import shap
+explainer = shap.TreeExplainer(model)
+shap_values = explainer.shap_values(X_train)
+
+shap.summary_plot(shap_values, X_train)
+shap.summary_plot(
+    shap_values,
+    X_train,
+    plot_type="bar"
+)
+
+sample_idx = 0
+
+shap.force_plot(
+    explainer.expected_value,
+    shap_values[sample_idx],
+    X_train.iloc[sample_idx],
+    matplotlib=True
+)
+
+shap.dependence_plot(
+    "feature_2",  # ganti fitur utama
+    shap_values,
+    X_train
+)
