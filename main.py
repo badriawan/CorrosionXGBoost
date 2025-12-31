@@ -17,6 +17,8 @@ file_path = "/content/drive/MyDrive/S3 UTP/dataset/Soil_Pitting_Corrosion_Data_F
 df = pd.read_excel(file_path)
 
 print(df.head())
+print(df.shape)
+
 
 X = df.drop(columns=['target'])  # ganti 'target' sesuai kolom kamu
 y = df['target']
