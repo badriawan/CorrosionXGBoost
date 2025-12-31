@@ -107,13 +107,14 @@ import shap
 explainer = shap.TreeExplainer(model)
 shap_values = explainer.shap_values(X_train)
 
-shap.summary_plot(shap_values, X_train)
+shap.summary_plot(shap_values, X_train, show=False)
 plt.savefig("summary_plot.png", dpi=300, bbox_inches="tight")
 
 shap.summary_plot(
     shap_values,
     X_train,
-    plot_type="bar"
+    plot_type="bar",
+    show=False
 )
 plt.savefig("summary_2.png", dpi=300, bbox_inches="tight")
 
@@ -124,7 +125,8 @@ shap.force_plot(
     explainer.expected_value,
     shap_values[sample_idx],
     X_train.iloc[sample_idx],
-    matplotlib=True
+    matplotlib=True,
+    show=False
 )
 plt.savefig("force.png", dpi=300, bbox_inches="tight")
 
@@ -132,7 +134,9 @@ plt.savefig("force.png", dpi=300, bbox_inches="tight")
 shap.dependence_plot(
     "feature_2",  # ganti fitur utama
     shap_values,
-    X_train
+    X_train,
+    show=False
+
 )
 plt.savefig("dependence.png", dpi=300, bbox_inches="tight")
 
