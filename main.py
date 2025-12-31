@@ -34,6 +34,8 @@ X = pd.get_dummies(
 
 print(X.dtypes)
 
+feature_names = X.columns
+
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
@@ -70,11 +72,20 @@ plt.xlabel("Importance Score")
 plt.title("Feature Importance - XGBoost")
 plt.show()
 
-new_data = pd.DataFrame({
-    'feature_1': [7.2],
-    'feature_2': [45],
-    'feature_3': [30]
-})
+# simpan feature names
+feature_names = X.columns
+
+# template inference
+new_data = pd.DataFrame(
+    np.zeros((1, len(feature_names))),
+    columns=feature_names
+)
+
+new_data["feature_1"] = 7.2
+new_data["feature_2"] = 45
+new_data["feature_3"] = 30
+new_data["feature_11_WTC"] = 1
+new_data["feature_12_SC"] = 1
 
 prediction = model.predict(new_data)
 print("Prediksi corrosion:", prediction)
