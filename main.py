@@ -21,6 +21,20 @@ print(df.head())
 X = df.drop(columns=['target'])  # ganti 'target' sesuai kolom kamu
 y = df['target']
 
+target_column = "target"
+
+X = df.drop(columns=[target_column])
+y = df[target_column]
+
+X = pd.get_dummies(
+    X,
+    columns=["feature_11", "feature_12"],
+    drop_first=True
+)
+
+print(X.dtypes)
+
+
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
