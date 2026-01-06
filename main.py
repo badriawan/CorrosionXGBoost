@@ -88,7 +88,7 @@ new_data["t (years)"] = 20
 new_data["pH"] = 4.5
 new_data["pp (V)"] = -0.8
 new_data["ct_WTC"] = 1
-new_data["Class_C"] = 1
+new_data["Class_SC"] = 1
 
 prediction = model.predict(new_data)
 print("Prediksi corrosion:", prediction)
