@@ -54,7 +54,7 @@ model = XGBRegressor(
     colsample_bytree=0.9798,
     min_child_weight=3.0,
     gamma=0.3748,
-    scale_pos_weight=0.0
+    scale_pos_weight=0.0,
     objective='reg:squarederror',
     random_state=42
 )
