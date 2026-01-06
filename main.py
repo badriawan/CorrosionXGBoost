@@ -55,8 +55,8 @@ model = XGBRegressor(
     min_child_weight=3.0,
     gamma=0.3748,
     scale_pos_weight=0.0
-    #objective='reg:squarederror',
-    #random_state=42
+    objective='reg:squarederror',
+    random_state=42
 )
 
 model.fit(X_train, y_train)
