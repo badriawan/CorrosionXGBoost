@@ -44,13 +44,19 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 model = XGBRegressor(
-    n_estimators=300,
-    max_depth=5,
-    learning_rate=0.05,
-    subsample=0.8,
-    colsample_bytree=0.8,
-    objective='reg:squarederror',
-    random_state=42
+    n_estimators=4282,
+    max_depth=12,
+    learning_rate=0.0216,
+    subsample=0.6775,
+    reg_lambda=0.8544,
+    reg_alpha=0.2380,
+    max_delta_step=10.0,
+    colsample_bytree=0.9798,
+    min_child_weight=3.0,
+    gamma=0.3748,
+    scale_pos_weight=0.0
+    #objective='reg:squarederror',
+    #random_state=42
 )
 
 model.fit(X_train, y_train)
