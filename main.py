@@ -30,7 +30,7 @@ y = df[target_column]
 
 X = pd.get_dummies(
     X,
-    columns=["feature_11", "feature_12"],
+    columns=["ct", "Class"],
     drop_first=True
 )
 
@@ -84,11 +84,11 @@ new_data = pd.DataFrame(
     columns=feature_names
 )
 
-new_data["feature_1"] = 7.2
-new_data["feature_2"] = 45
-new_data["feature_3"] = 30
-new_data["feature_11_WTC"] = 1
-new_data["feature_12_SC"] = 1
+new_data["t (years)"] = 20
+new_data["pH"] = 4.5
+new_data["pp (V)"] = -0.8
+new_data["ct"] = 1
+new_data["Class"] = 1
 
 prediction = model.predict(new_data)
 print("Prediksi corrosion:", prediction)
@@ -132,7 +132,7 @@ plt.savefig("force.png", dpi=300, bbox_inches="tight")
 
 
 shap.dependence_plot(
-    "feature_2",  # ganti fitur utama
+    "pH",  # ganti fitur utama
     shap_values,
     X_train,
     show=False
