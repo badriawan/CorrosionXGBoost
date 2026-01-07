@@ -6,10 +6,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 
 import matplotlib.pyplot as plt
-import seaborn as sns
-import joblib
-import os
-import logging
+import optuna
+from sklearn.model_selection import cross_val_score
 
 
 # Ganti dengan path file kamu
@@ -43,39 +41,64 @@ X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-model = XGBRegressor(
-    booster="dart",          # 🔥 AKTIFKAN DART
-    n_estimators=4282,
-    max_depth=12,
-    learning_rate=0.0216,
-    subsample=0.6775,
-    reg_lambda=0.8544,
-    reg_alpha=0.2380,
-    max_delta_step=10.0,
-    colsample_bytree=0.9798,
-    min_child_weight=3.0,
-    gamma=0.3748,
-    scale_pos_weight=0.0,
-    rate_drop=0.1,           # probabilitas drop tree
-    skip_drop=0.5,           # probabilitas tidak drop apa pun
-    objective='reg:squarederror',
-    random_state=42
-)
-
 # model = XGBRegressor(
 #     booster="dart",          # 🔥 AKTIFKAN DART
-#     n_estimators=500,        # biasanya DART perlu lebih banyak tree
-#     max_depth=5,
-#     learning_rate=0.05,
-#     subsample=0.8,
-#     colsample_bytree=0.8,
-
+#     n_estimators=4282,
+#     max_depth=12,
+#     learning_rate=0.0216,
+#     subsample=0.6775,
+#     reg_lambda=0.8544,
+#     reg_alpha=0.2380,
+#     max_delta_step=10.0,
+#     colsample_bytree=0.9798,
+#     min_child_weight=3.0,
+#     gamma=0.3748,
+#     scale_pos_weight=0.0,
 #     rate_drop=0.1,           # probabilitas drop tree
 #     skip_drop=0.5,           # probabilitas tidak drop apa pun
-
-#     objective="reg:squarederror",
+#     objective='reg:squarederror',
 #     random_state=42
 # )
+
+
+def objective(trial):
+    params = {
+        "booster": "dart",
+        "n_estimators": trial.suggest_int("n_estimators", 200, 3000),
+        "max_depth": trial.suggest_int("max_depth", 3, 12),
+        "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.3, log=True),
+        "subsample": trial.suggest_float("subsample", 0.5, 1.0),
+        "colsample_bytree": trial.suggest_float("colsample_bytree", 0.5, 1.0),
+
+        "min_child_weight": trial.suggest_int("min_child_weight", 1, 10),
+        "gamma": trial.suggest_float("gamma", 0.0, 1.0),
+
+        "reg_alpha": trial.suggest_float("reg_alpha", 0.0, 1.0),
+        "reg_lambda": trial.suggest_float("reg_lambda", 0.0, 1.0),
+
+        "rate_drop": trial.suggest_float("rate_drop", 0.0, 0.3),
+        "skip_drop": trial.suggest_float("skip_drop", 0.0, 0.7),
+
+        "objective": "reg:squarederror",
+        "random_state": 42,
+    }
+    model = XGBRegressor(**params)
+    scores = cross_val_score(
+            model, X_train, y_train,
+            scoring='neg_root_mean_squared_error',
+            cv=5,
+            n_jobs=-1
+        )
+    return -scores.mean()
+
+study = optuna.create_study(direction="minimize")
+study.optimize(objective, n_trials=50)
+
+best_params = study.best_params
+print("Best parameters:", best_params)
+print("Best CV RMSE:", study.best_value)
+
+model = XGBRegressor(**best_params)
 
 model.fit(X_train, y_train)
 
@@ -117,21 +140,13 @@ new_data["Class_SC"] = 1
 prediction = model.predict(new_data)
 print("Prediksi corrosion:", prediction)
 
-from sklearn.model_selection import cross_val_score
-
-# scores = cross_val_score(
-#     model, X, y,
-#     scoring='neg_root_mean_squared_error',
-#     cv=5
-# )
-
 scores = cross_val_score(
-    model,
-    X_train,
-    y_train,
-    scoring="neg_root_mean_squared_error",
-    cv=10
+    model, X, y,
+    scoring='neg_root_mean_squared_error',
+    cv=5
 )
+
+
 
 print("CV RMSE:", -scores.mean())
 
