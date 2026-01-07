@@ -56,6 +56,8 @@ model = XGBRegressor(
     min_child_weight=3.0,
     gamma=0.3748,
     scale_pos_weight=0.0,
+    rate_drop=0.1,           # probabilitas drop tree
+    skip_drop=0.5,           # probabilitas tidak drop apa pun
     objective='reg:squarederror',
     random_state=42
 )
