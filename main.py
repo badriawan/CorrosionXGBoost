@@ -85,18 +85,18 @@ def objective(trial):
     model = XGBRegressor(**params)
     scores = cross_val_score(
             model, X_train, y_train,
-            scoring='neg_root_mean_squared_error',
+            scoring='neg_mean_absolute_error',
             cv=5,
             n_jobs=-1
         )
     return -scores.mean()
 
 study = optuna.create_study(direction="minimize")
-study.optimize(objective, n_trials=50)
+study.optimize(objective, n_trials=10)
 
 best_params = study.best_params
 print("Best parameters:", best_params)
-print("Best CV RMSE:", study.best_value)
+print("Best CV MAE:", study.best_value)
 
 model = XGBRegressor(**best_params)
 
