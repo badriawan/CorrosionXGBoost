@@ -64,7 +64,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 def objective(trial):
     params = {
         "booster": "dart",
-        "n_estimators": trial.suggest_int("n_estimators", 200, 3000),
+        "n_estimators": trial.suggest_int("n_estimators", 1000, 5000),
         "max_depth": trial.suggest_int("max_depth", 3, 12),
         "learning_rate": trial.suggest_float("learning_rate", 0.01, 0.3, log=True),
         "subsample": trial.suggest_float("subsample", 0.5, 1.0),
